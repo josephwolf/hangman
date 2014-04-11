@@ -1,0 +1,42 @@
+
+
+def pic_a_word
+		file = File.open("words.txt", "r")
+	# file.readlines.sample
+	
+	file.read.split("\n").sample
+	
+	# file.rewind
+	# puts file.readlines
+end
+
+@word = pic_a_word
+@guess_word = @word.upcase.chars
+@what_is_shown = (1..(@guess_word.length)).to_a.collect {|elem| "_"}
+@guessed_letters = []
+@counter = []
+	
+
+def search_word (search_letter)
+	puts "please put a single letter" if search_letter.length > 1
+	puts "you already guessed that letter!" if @guessed_letters.include?(search_letter)
+	
+	@guess_word.each_with_index {|letter, index| search_letter == letter ? @what_is_shown[index] = letter : @what_is_shown[index]}
+	
+	@counter << 1 if !@guess_word.include?(search_letter) && !@guessed_letters.include?(search_letter)
+	@guessed_letters << search_letter
+	
+
+end     
+
+def play
+	puts "Welcome to hangman! Guess a letter."
+	while @what_is_shown.include? "_" do
+		search_word(gets.chomp.upcase)
+		puts @what_is_shown.join('')	
+		return puts "you're hung!\n The word was #{@word.upcase}" if @counter.length == 10
+	end
+	puts "you win!"	
+end
+
+play
